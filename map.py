@@ -13,38 +13,34 @@ class SecondaryWindow(QMainWindow):
         super().__init__()
         self.setWindowTitle("Route")
 
-        # Load the image
         self.image_label = QLabel(self)
         pixmap = QPixmap("map_final.png")
         pixmap = pixmap.scaledToWidth(300)
         self.image_label.setPixmap(pixmap)
 
-        # Create layout for buttons and image
         layout = QVBoxLayout()
         layout.addWidget(self.image_label)
 
         grid_layout = QGridLayout()
-
-        # Create buttons "one points", "two points", and "three points"
+  
         button_labels = ["one points", "two points", "three points","cancel"]
         positions = [(i, j) for i in range(2) for j in range(2)]
         for label, position in zip(button_labels, positions):
             button = QPushButton(label)
             button.clicked.connect(lambda ch, lbl=label: self.on_button_clicked(lbl))
-            button.setFixedSize(5 * 30, 2 * 30)  # Set width and height
+            button.setFixedSize(5 * 30, 2 * 30) 
             grid_layout.addWidget(button, *position)
             font = button.font()
             font.setPointSize(15) 
             button.setFont(font)
         layout.addLayout(grid_layout)
-        # grid_layout.addWidget(button, *position)
-        # Create a widget and set layout
+        
         widget = QWidget()
         widget.setLayout(layout)
         self.setCentralWidget(widget)
 
-        self.waypoints = []  # Initialize waypoints list
-        self.current_waypoint_index = 0  # Initialize waypoint index
+        self.waypoints = []  
+        self.current_waypoint_index = 0  
         self.move_timer = QTimer(self)
         self.move_timer.timeout.connect(self.move_to_next_waypoint)
 
@@ -63,7 +59,7 @@ class SecondaryWindow(QMainWindow):
             ]
         if button_label == "cancel":
             sys.exit(0)
-        self.current_waypoint_index = 0  # Reset waypoint index
+        self.current_waypoint_index = 0 
         self.move_to_next_waypoint()
 
     def move_to_next_waypoint(self):
@@ -71,10 +67,9 @@ class SecondaryWindow(QMainWindow):
         move_client = actionlib.SimpleActionClient('move_base', MoveBaseAction)
         move_client.wait_for_server()
 
-        # Check if reached the last waypoint
         if self.current_waypoint_index == len(self.waypoints):
             print("Reached the final waypoint")
-            self.waypoints = []  # Reset waypoints after reaching
+            self.waypoints = []  
             return
 
         for pose in self.waypoints[self.current_waypoint_index]:
@@ -82,7 +77,7 @@ class SecondaryWindow(QMainWindow):
             move_client.send_goal(goal)
             sys.exit(0)
 
-        self.current_waypoint_index += 1  # Move to the next waypoint
+        self.current_waypoint_index += 1  
         self.clear_global_costmap()
 
     

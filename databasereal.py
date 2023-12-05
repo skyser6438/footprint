@@ -9,19 +9,15 @@ class DatabaseDisplayApp(QWidget):
         self.setWindowTitle("Database Display")
         self.layout = QVBoxLayout()
 
-        self.setGeometry(100, 100, 500, 200)  # Set the window size (width x height)
+        self.setGeometry(100, 100, 500, 200)  
 
-        # Results display with an expanded table
+        
         self.result_table = QTableWidget()
-        # self.result_table.setRowCount(500)  # Increase row count
-        # self.result_table.setColumnCount(10)  # Increase column count
         self.result_table.horizontalHeader().setStretchLastSection(True)
 
-        self.result_table.horizontalHeader().setDefaultSectionSize(150)  # Set column width
-        self.result_table.verticalHeader().setDefaultSectionSize(40)  # Set row height
+        self.result_table.horizontalHeader().setDefaultSectionSize(150)  
+        self.result_table.verticalHeader().setDefaultSectionSize(40) 
 
-
-        # Add table widget to the layout
         self.layout.addWidget(self.result_table)
         self.setLayout(self.layout)
 
@@ -43,7 +39,7 @@ class DatabaseDisplayApp(QWidget):
             data = cursor.fetchall()
             
             if not data:
-                return  # No data found
+                return  
             
             self.result_table.setRowCount(len(data))
             self.result_table.setColumnCount(len(data[0]))
